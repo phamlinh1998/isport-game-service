@@ -5,6 +5,7 @@ import com.game.service.domain.entities.LuckySpinReward;
 import com.game.service.domain.services.LuckySpinRewardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,8 +23,8 @@ public class GameController {
     }
 
     @GetMapping("spin")
-    public LuckySpinReward getLuckySpinReward(){
-        return luckySpinRewardService.getLuckySpinReward();
+    public LuckySpinReward getLuckySpinReward(@RequestHeader(required = false) Integer userId){
+        return luckySpinRewardService.getLuckySpinReward(userId);
     }
 
 }
