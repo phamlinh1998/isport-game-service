@@ -1,7 +1,6 @@
 package com.game.service.app.controller;
 
 import com.game.service.app.response.LuckySpinGiftResponse;
-import com.game.service.domain.entities.data.LuckySpinWalletConfig;
 import com.game.service.domain.services.LuckySpinGiftService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

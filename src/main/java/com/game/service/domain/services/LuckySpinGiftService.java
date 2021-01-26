@@ -1,20 +1,16 @@
 package com.game.service.domain.services;
 
-import com.game.service.app.response.GiftIdResponse;
 import com.game.service.app.response.LuckySpinGiftResponse;
 import com.game.service.domain.entities.Config;
 import com.game.service.domain.entities.Gift;
 import com.game.service.domain.entities.LuckySpinGift;
-import com.game.service.domain.entities.data.LuckySpinWalletConfig;
 import com.game.service.domain.entities.type.LuckySpinGiftFrequency;
 import com.game.service.domain.entities.type.LuckySpinGiftType;
 import com.game.service.domain.exceptions.ResourceNotFoundException;
-import com.game.service.domain.repositories.*;
 import com.game.service.domain.utils.JsonParser;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
@@ -52,17 +48,25 @@ public class LuckySpinGiftService extends BaseService {
 
         LuckySpinGift spinGift = luckySpinGiftRepository.findLuckySpinGiftByType(LuckySpinGiftType.LOST_TURN);
 
+        //set odds LOST_TURN
         for (LuckySpinGift luckySpinGift : luckySpinGiftList) {
             Gift gift = giftRepository.findGiftByLuckySpinGiftId(luckySpinGift.getId());
-
-            if( !luckySpinGift.getType().equals(LuckySpinGiftType.LOST_TURN) && luckySpinGift.getMaxReward() == gift.getQuantity()){
-                spinGift.setOdds(spinGift.getOdds() + luckySpinGift.getOdds());
+            if(gift != null){
+                if( !luckySpinGift.getType().equals(LuckySpinGiftType.LOST_TURN) && luckySpinGift.getMaxReward() == gift.getQuantity()){
+                    spinGift.setOdds(spinGift.getOdds() + luckySpinGift.getOdds());
+                }
             }
+
         }
 
         //tao mang random
         for (LuckySpinGift luckySpinGift : luckySpinGiftList) {
             Gift gift = giftRepository.findGiftByLuckySpinGiftId(luckySpinGift.getId());
+            if(gift == null){
+                gift = new Gift();
+                gift.setQuantity(0);
+            }
+
             Map<String,Integer> oddsMap = new HashMap<>();
             if(luckySpinGift.getType().equals(LuckySpinGiftType.LOST_TURN)){
                 oddsMap.put(min,tempInt);
