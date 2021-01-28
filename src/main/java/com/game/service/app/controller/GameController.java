@@ -4,6 +4,7 @@ import com.game.service.app.response.LuckySpinGiftResponse;
 import com.game.service.domain.services.LuckySpinGiftService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,12 +18,12 @@ public class GameController {
     private LuckySpinGiftService luckySpinGiftService;
 
     @GetMapping("configs")
-    public List<LuckySpinGiftResponse> getGift(){
+    public List<LuckySpinGiftResponse> getGift(@RequestHeader(name = "x-predict-user-id") Integer userId){
         return luckySpinGiftService.getGift();
     }
 
     @GetMapping("spin")
-    public LuckySpinGiftResponse getLuckySpinGift() throws IOException {
+    public LuckySpinGiftResponse getLuckySpinGift(@RequestHeader(name = "x-predict-user-id") Integer userId) throws IOException {
         return luckySpinGiftService.getLuckySpinGift();
     }
 
